@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>لوحة البوت</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://kit.fontawesome.com/a2e0bba1bd.js" crossorigin="anonymous"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #1e1e2f, #3a3a52);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: white;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 30px;
+      text-shadow: 0 0 10px #000;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 240px;
+      padding: 15px;
+      margin: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #fff;
+      background-color: #444;
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn i {
+      margin-left: 10px;
+    }
+
+    .btn:hover {
+      background-color: #666;
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 600px) {
+      .btn {
+        width: 90%;
+        font-size: 16px;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>تنصيب بوت اينازوما</h1>
+
+  <button class="btn" onclick="window.open('/pair')">
+    <i class="fas fa-link"></i> كود التنصيب
+  </button>
+
+  <button class="btn" onclick="window.open('https://whatsapp.com/channel/0029Vb6FqFvKWEKkCGsryv0k')">
+    <i class="fab fa-whatsapp"></i> قناة الواتساب
+  </button>
+  
+  <button class="btn" onclick="window.open('https://wa.me/966553357953?text=بخصوص+موقع+التنصيب:')">
+    <i class="fab fa-whatsapp"></i> التواصل مع المطور
+  </button>
+
+</body>
+</html>
