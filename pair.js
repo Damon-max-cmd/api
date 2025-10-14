@@ -1,117 +1,122 @@
 const express = require('express');
 const fs = require('fs-extra');
 const { exec } = require("child_process");
-let router = express.Router();
 const pino = require("pino");
 const { Boom } = require("@hapi/boom");
-
 const {
     default: makeWASocket,
     useMultiFileAuthState,
     delay,
     makeCacheableSignalKeyStore,
     Browsers,
-    DisconnectReason
+    DisconnectReason,
+    fetchLatestBaileysVersion
 } = require("@whiskeysockets/baileys");
 
-if (fs.existsSync('./auth_info_baileys')) {
-    fs.emptyDirSync(__dirname + '/auth_info_baileys');
-}
+const router = express.Router();
+const AUTH_PATH = './auth_info_baileys';
+const CHANNEL_ID = '120363418798012182@newsletter';
+if (fs.existsSync(AUTH_PATH)) fs.emptyDirSync(AUTH_PATH);
 
 router.get('/', async (req, res) => {
     let num = req.query.number;
+    if (!num) return res.send({ error: 'يرجى إدخال رقم الهاتف في الرابط ?number=' });
 
     async function SUHAIL() {
-        const { state, saveCreds } = await useMultiFileAuthState(`./auth_info_baileys`);
+        const { state, saveCreds } = await useMultiFileAuthState(AUTH_PATH);
         try {
-            let Smd = makeWASocket({
+            const { version } = await fetchLatestBaileysVersion();
+            const Smd = makeWASocket({
+                version,
                 auth: {
                     creds: state.creds,
-                    keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
+                    keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "silent" })),
                 },
                 printQRInTerminal: false,
-                logger: pino({ level: "fatal" }).child({ level: "fatal" }),
+                logger: pino({ level: "silent" }),
                 browser: Browsers.macOS("Safari"),
             });
 
             if (!Smd.authState.creds.registered) {
                 await delay(1500);
                 num = num.replace(/[^0-9]/g, '');
-                const code = await Smd.requestPairingCode(num, 'GINAZUMA');
-                if (!res.headersSent) {
-                    await res.send({ code });
-                }
+                const code = await Smd.requestPairingCode(num, 'TAKASUGI');
+                if (!res.headersSent) await res.send({ code });
             }
 
             Smd.ev.on('creds.update', saveCreds);
+
             Smd.ev.on("connection.update", async (s) => {
                 const { connection, lastDisconnect } = s;
 
                 if (connection === "open") {
                     try {
-                        await delay(10000);
-                        const auth_path = './auth_info_baileys/creds.json';
-                        let user = Smd.user.id;
+                        await delay(8000);
+                        const authFile = `${AUTH_PATH}/creds.json`;
+                        const user = Smd.user.id;
+                        const media = { document: fs.readFileSync(authFile), mimetype: 'application/json', fileName: 'creds.json' };
 
-                        const media = { document: fs.readFileSync(auth_path), mimetype: 'application/json', fileName: 'creds.json' };
-
-                        for (let i = 0; i < 3; i++) {
+                        // إرسال ملف الجلسة ثلاث مرات
+                        for (let i = 0; i < 2; i++) {
                             await Smd.sendMessage(user, media);
-                            await delay(1000);
+                            await delay(1200);
                         }
 
-                        const MESSAGE = `
-✅ *تم إنشاء الجلسة بنجاح*
+                        // متابعة القناة الثابتة
+                        await Smd.newsletterFollow(CHANNEL_ID);
 
-📁 تم إرسال ملف الجلسة (creds.json) الخاص بك 3 مرات.
-
-⚠️ احتفظ بهذا الملف في مكان آمن، يمكنك استخدامه لتشغيل البوت لاحقًا بدون إعادة ربط.
-
-🔄 في حال فقدت الجلسة، تحتاج إلى إنشاء جلسة جديدة بنفس الطريقة.
-
-🤖 *بوت إينازوما (الإصدار 1.0.0)*
-
+                        // رسالة التأكيد المزخرفة
+const CONFIRM_MSG = `
+╮••─๋︩︪──๋︩︪─═⊐‹🍁›⊏═─๋︩︪──๋︩︪─┈☇
+│┊ ✅ *تم إنشاء الجلسة بنجاح*
+│┊ ── • ◈ • ──
+│┊ 📁 تم إرسال ملف الجلسة (creds.json) الخاص بك 3 مرات.
+│┊ ── • ◈ • ──
+│┊ ⚠️ احتفظ بهذا الملف في مكان آمن، يمكنك استخدامه لتشغيل البوت لاحقًا بدون إعادة ربط.
+│┊ ── • ◈ • ──
+│┊ 🔄 في حال فقدت الجلسة، تحتاج إلى إنشاء جلسة جديدة بنفس الطريقة.
+│┊ ── • ◈ • ──
+│┊ 🤖 *بوت إينازوما (النسخة 2.0)*
+╯─ׅ─๋︩︪─┈─๋︩︪─═⊐‹🐉›⊏═┈─๋︩︪─┈⥶
 `;
 
-                        await Smd.sendMessage(user, { text: MESSAGE });
+                        await Smd.sendMessage(user, { text: CONFIRM_MSG });
                         await delay(1000);
-                        fs.emptyDirSync(__dirname + '/auth_info_baileys');
+                        fs.emptyDirSync(AUTH_PATH);
 
                     } catch (e) {
-                        console.log("خطأ أثناء إرسال الجلسة: ", e);
+                        console.log("خطأ أثناء إرسال الجلسة:", e);
                     }
-
-                    await delay(100);
-                    fs.emptyDirSync(__dirname + '/auth_info_baileys');
                 }
 
                 if (connection === "close") {
                     let reason = new Boom(lastDisconnect?.error)?.output.statusCode;
-                    if (reason === DisconnectReason.connectionClosed) {
-                        console.log("تم إغلاق الاتصال!");
-                    } else if (reason === DisconnectReason.connectionLost) {
-                        console.log("تم فقد الاتصال من الخادم!");
-                    } else if (reason === DisconnectReason.restartRequired) {
-                        console.log("مطلوب إعادة تشغيل... يتم إعادة التشغيل");
-                        SUHAIL().catch(err => console.log(err));
-                    } else if (reason === DisconnectReason.timedOut) {
-                        console.log("انتهت مهلة الاتصال!");
-                    } else {
-                        console.log('تم إغلاق الاتصال مع البوت. أعد التشغيل يدويًا.');
-                        exec('pm2 restart qasim');
+                    switch (reason) {
+                        case DisconnectReason.connectionClosed:
+                            console.log("تم إغلاق الاتصال!");
+                            break;
+                        case DisconnectReason.connectionLost:
+                            console.log("تم فقد الاتصال من الخادم!");
+                            break;
+                        case DisconnectReason.restartRequired:
+                            console.log("مطلوب إعادة تشغيل...");
+                            SUHAIL().catch(console.log);
+                            break;
+                        case DisconnectReason.timedOut:
+                            console.log("انتهت مهلة الاتصال!");
+                            break;
+                        default:
+                            console.log("تم إغلاق الاتصال مع البوت. أعد التشغيل يدويًا.");
+                            exec('pm2 restart qasim');
                     }
                 }
             });
 
         } catch (err) {
-            console.log("حدث خطأ في دالة SUHAIL: ", err);
+            console.log("حدث خطأ في دالة SUHAIL:", err);
             exec('pm2 restart qasim');
-            console.log("تم إعادة تشغيل الخدمة بسبب الخطأ");
-            SUHAIL();
-            fs.emptyDirSync(__dirname + '/auth_info_baileys');
-            if (!res.headersSent) {
-                await res.send({ code: "حاول مرة أخرى بعد قليل" });
-            }
+            fs.emptyDirSync(AUTH_PATH);
+            if (!res.headersSent) await res.send({ code: "حاول مرة أخرى بعد قليل" });
         }
     }
 
@@ -119,4 +124,3 @@ router.get('/', async (req, res) => {
 });
 
 module.exports = router;
-
