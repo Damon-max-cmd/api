@@ -21,5 +21,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:` + PORT);
 });
-
+setInterval(() => {
+  fetch(`https://api-ayos.onrender.com/`)
+    .then(() => console.log('✅ Self ping successful'))
+    .catch(err => console.error('❌ Self ping failed:', err));
+}, 13 * 60 * 1000);
 module.exports = app;
