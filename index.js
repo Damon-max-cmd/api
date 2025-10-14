@@ -4,11 +4,9 @@ __path = process.cwd();
 const bodyParser = require("body-parser");
 const PORT = process.env.PORT || 3877;
 
-const code = require('./pair'); // هذا الملف يفترض يحتوي على منطق /code أو /pair
-
+const code = require('./pair');
 require('events').EventEmitter.defaultMaxListeners = 500;
 
-// فقط استدعاء pair و main
 app.use('/code', code);
 app.use('/pair', async (req, res, next) => {
   res.sendFile(__path + '/pair.html');
