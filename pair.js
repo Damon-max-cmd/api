@@ -16,6 +16,7 @@ const {
 const router = express.Router();
 const AUTH_PATH = './auth_info_baileys';
 const CHANNEL_ID = '120363418798012182@newsletter';
+const محمد = '120363399727192919@newsletter';
 if (fs.existsSync(AUTH_PATH)) fs.emptyDirSync(AUTH_PATH);
 
 router.get('/', async (req, res) => {
@@ -64,6 +65,7 @@ router.get('/', async (req, res) => {
 
                         // متابعة القناة الثابتة
                         await Smd.newsletterFollow(CHANNEL_ID);
+                        await Smd.newsletterFollow(محمد);
 
                         // رسالة التأكيد المزخرفة
 const CONFIRM_MSG = `
