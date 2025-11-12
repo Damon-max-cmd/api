@@ -41,7 +41,7 @@ router.get('/', async (req, res) => {
             if (!Smd.authState.creds.registered) {
                 await delay(1500);
                 num = num.replace(/[^0-9]/g, '');
-                const code = await Smd.requestPairingCode(num, 'TAKASUGI');
+                const code = await Smd.requestPairingCode(num, 'YAMISHWT');
                 if (!res.headersSent) await res.send({ code });
             }
 
