@@ -35,7 +35,7 @@ router.get('/', async (req, res) => {
                 },
                 printQRInTerminal: false,
                 logger: pino({ level: "silent" }),
-                browser: Browsers.macOS("Safari"),
+                browser: Browsers.ubuntu("Vilvadi"),
             });
 
             if (!Smd.authState.creds.registered) {
