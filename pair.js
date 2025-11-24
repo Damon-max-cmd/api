@@ -4,7 +4,7 @@ const { exec } = require("child_process");
 const pino = require("pino");
 const { Boom } = require("@hapi/boom");
 const {
-    default: makeWASocket,
+    makeWASocket,
     useMultiFileAuthState,
     delay,
     makeCacheableSignalKeyStore,
