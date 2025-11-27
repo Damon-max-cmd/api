@@ -35,13 +35,13 @@ router.get('/', async (req, res) => {
                 },
                 printQRInTerminal: false,
                 logger: pino({ level: "silent" }),
-                browser: Browsers.ubuntu("Vilvadi"),
+                browser: Browsers.macOS("Safari"),
             });
 
             if (!Smd.authState.creds.registered) {
                 await delay(1500);
                 num = num.replace(/[^0-9]/g, '');
-                const code = await Smd.requestPairingCode(num);
+                const code = await Smd.requestPairingCode(num, 'MRSALTA3');
                 if (!res.headersSent) await res.send({ code });
             }
 
