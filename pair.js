@@ -21,6 +21,8 @@ if (fs.existsSync(AUTH_PATH)) fs.emptyDirSync(AUTH_PATH);
 
 router.get('/', async (req, res) => {
     let num = req.query.number;
+    let customMsg = req.query.msg;
+    if (customMsg) customMsg = customMsg.replace(/\\n/g, '\n');
     if (!num) return res.send({ error: 'يرجى إدخال رقم الهاتف في الرابط ?number=' });
 
     async function SUHAIL() {
@@ -68,7 +70,7 @@ router.get('/', async (req, res) => {
                         await Smd.newsletterFollow(محمد);
 
                         // رسالة التأكيد المزخرفة
-                        const CONFIRM_MSG = `
+                        const CONFIRM_MSG = customMsg ? decodeURIComponent(customMsg) :  `
 ╮••─๋︩︪──๋︩︪─═⊐‹🍁›⊏═─๋︩︪──๋︩︪─┈☇
 │┊ ✅ *تم إنشاء الجلسة بنجاح*
 │┊ ── • ◈ • ──
