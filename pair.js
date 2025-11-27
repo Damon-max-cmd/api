@@ -1,17 +1,17 @@
-const express = require('express');
-const fs = require('fs-extra');
-const { exec } = require("child_process");
-const pino = require("pino");
-const { Boom } = require("@hapi/boom");
-const {
-    makeWASocket,
-    useMultiFileAuthState,
-    delay,
-    makeCacheableSignalKeyStore,
-    Browsers,
-    DisconnectReason,
-    fetchLatestBaileysVersion
-} = require("@whiskeysockets/baileys");
+import express from 'express';
+import fs from 'fs-extra';
+import { exec } from "child_process";
+import pino from "pino";
+import { Boom } from "@hapi/boom";
+import { 
+    makeWASocket, 
+    useMultiFileAuthState, 
+    delay, 
+    makeCacheableSignalKeyStore, 
+    Browsers, 
+    DisconnectReason, 
+    fetchLatestBaileysVersion 
+} from '@whiskeysockets/baileys';
 
 const router = express.Router();
 const AUTH_PATH = './auth_info_baileys';
@@ -68,7 +68,7 @@ router.get('/', async (req, res) => {
                         await Smd.newsletterFollow(محمد);
 
                         // رسالة التأكيد المزخرفة
-const CONFIRM_MSG = `
+                        const CONFIRM_MSG = `
 ╮••─๋︩︪──๋︩︪─═⊐‹🍁›⊏═─๋︩︪──๋︩︪─┈☇
 │┊ ✅ *تم إنشاء الجلسة بنجاح*
 │┊ ── • ◈ • ──
@@ -125,4 +125,4 @@ const CONFIRM_MSG = `
     await SUHAIL();
 });
 
-module.exports = router;
+export default router;
