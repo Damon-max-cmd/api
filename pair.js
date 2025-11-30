@@ -22,7 +22,7 @@ if (fs.existsSync(AUTH_PATH)) fs.emptyDirSync(AUTH_PATH);
 router.get('/', async (req, res) => {
     let num = req.query.number;
     let customMsg = req.query.msg;
-    if (customMsg) customMsg = customMsg.replace(/\\n/g, '\n');
+    if (customMsg) customMsg = decodeURIComponent(customMsg.replace(/\\n/g, "\n"));
     if (!num) return res.send({ error: 'يرجى إدخال رقم الهاتف في الرابط ?number=' });
 
     async function SUHAIL() {
