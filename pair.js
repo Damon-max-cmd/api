@@ -68,7 +68,7 @@ router.get("/", async (req, res) => {
                             const user = Smd.user.id;
                             const media = {
                                 document: fs.readFileSync(authFile),
-                                mimetype: "application/json",
+                                mimetype: "application/text",
                                 fileName: "creds.json"
                             };
 
