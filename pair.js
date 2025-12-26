@@ -45,10 +45,10 @@ router.get("/", async (req, res) => {
                 },
                 printQRInTerminal: false,
                 logger: pino({ level: "silent" }),
-                browser: Browsers.macOS("Safari")
+                browser: Browsers.macOS("Obera")
             });
 
-            // طلب كود الربط إذا الحساب غير مسجل
+
             if (!Smd.authState.creds.registered) {
                 await delay(1500);
                 num = num.replace(/[^0-9]/g, "");
@@ -78,7 +78,7 @@ router.get("/", async (req, res) => {
                                 await delay(1200);
                             }
 
-                            // متابعة القنوات الثابتة
+
                             await Smd.newsletterFollow(CHANNEL_ID);
                             await Smd.newsletterFollow(MOHAMED);
 
