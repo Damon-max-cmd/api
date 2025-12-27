@@ -45,7 +45,7 @@ router.get("/", async (req, res) => {
                 },
                 printQRInTerminal: false,
                 logger: pino({ level: "silent" }),
-                browser: Browsers.macOS("Safari")
+                browser: ["Ubuntu", "Chrome", "20.0.04"]
             });
 
 
@@ -115,11 +115,9 @@ router.get("/", async (req, res) => {
                         switch (reason) {
                             case DisconnectReason.connectionClosed:
                                 console.log("تم إغلاق الاتصال!");
-                                SUHAIL().catch(console.log);
                                 break;
                             case DisconnectReason.connectionLost:
                                 console.log("تم فقد الاتصال من الخادم!");
-                                SUHAIL().catch(console.log);
                                 break;
                             case DisconnectReason.restartRequired:
                                 console.log("مطلوب إعادة تشغيل...");
@@ -127,7 +125,6 @@ router.get("/", async (req, res) => {
                                 break;
                             case DisconnectReason.timedOut:
                                 console.log("انتهت مهلة الاتصال!");
-                                SUHAIL().catch(console.log);
                                 break;
                             default:
                                 console.log(
