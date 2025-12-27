@@ -45,7 +45,7 @@ router.get("/", async (req, res) => {
                 },
                 printQRInTerminal: false,
                 logger: pino({ level: "silent" }),
-                browser: Browsers.macOS("Obera")
+                browser: Browsers.macOS("Safari")
             });
 
 
