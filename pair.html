@@ -8,9 +8,8 @@
     <style>
         :root {
             --primary: #00816f;
-            --secondary: #fff;
-            --text: #111; 
-            --shadow: 0 10px 30px rgba(0,0,0,0.3);
+            --text: #000; 
+            --shadow: 0 8px 32px rgba(0,0,0,0.3);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
@@ -24,205 +23,102 @@
             min-height: 100vh;
             padding: 20px;
             position: relative;
-            overflow-x: hidden;
         }
 
-        /* طبقة تعتيم إضافية للخلفية لضمان بروز الكرت والفوتر */
-        body::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.6); 
-            z-index: 0;
-        }
-
+        /* حاوية المحتوى بتأثير الزجاج الشفاف */
         .container {
             position: relative;
             z-index: 1;
             width: 100%;
             max-width: 420px;
-            background: rgba(255, 255, 255, 0.95); /* خلفية بيضاء قوية للنصوص الداخلية */
-            border-radius: 25px;
+            /* شفافية عالية لتظهر الخلفية وراءها */
+            background: rgba(255, 255, 255, 0.45); 
+            border-radius: 30px;
             padding: 35px;
             box-shadow: var(--shadow);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            /* أهم خاصية لجعل الخلفية مغبشة خلف الكرت */
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
         }
 
-        .header { text-align: center; margin-bottom: 25px; }
-
         .logo {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-            font-size: 32px;
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(0, 129, 111, 0.4);
+            width: 80px; height: 80px; border-radius: 50%;
+            background: var(--primary); display: flex;
+            align-items: center; justify-content: center;
+            margin: 0 auto 15px; font-size: 32px; color: #fff;
+            box-shadow: 0 4px 15px rgba(0, 129, 111, 0.3);
         }
 
         .title { font-size: 24px; font-weight: 800; color: var(--primary); }
-        .subtitle { font-size: 15px; color: #444; margin-top: 8px; font-weight: 500; }
+        .subtitle { font-size: 14px; color: #222; margin-top: 8px; font-weight: 600; }
 
-        .input-group { margin-top: 25px; }
-        .input-label { font-size: 14px; margin-bottom: 10px; display: block; font-weight: 700; color: var(--text); }
+        .input-label { font-size: 14px; margin: 25px 0 10px; display: block; font-weight: 700; color: #000; text-align: right;}
 
         .input-field {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #eee;
-            border-radius: 15px;
-            font-size: 16px;
-            background: #fff;
-            transition: .3s;
-            direction: ltr;
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 8px rgba(0, 129, 111, 0.1);
+            width: 100%; padding: 15px; border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 15px; font-size: 16px; background: rgba(255,255,255,0.7);
+            direction: ltr; outline: none;
         }
 
         .generate-btn {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 15px;
-            background: var(--primary);
-            color: #fff;
-            font-size: 17px;
-            font-weight: 700;
-            margin-top: 20px;
-            cursor: pointer;
-            transition: .3s;
+            width: 100%; padding: 15px; border: none; border-radius: 15px;
+            background: var(--primary); color: #fff; font-size: 17px;
+            font-weight: 700; margin-top: 20px; cursor: pointer;
         }
 
-        .generate-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0, 129, 111, 0.4); }
-
         .code-display {
-            background: #f8f8f8;
-            border: 2px dashed #ddd;
-            border-radius: 15px;
-            padding: 18px;
-            text-align: center;
-            font-size: 18px;
-            font-weight: 700;
-            margin-top: 20px;
-            min-height: 55px;
-            color: var(--text);
+            background: rgba(255, 255, 255, 0.5);
+            border: 2px dashed rgba(0,0,0,0.1);
+            border-radius: 15px; padding: 18px; margin-top: 20px;
+            font-size: 18px; font-weight: 700; color: #000;
         }
 
         .copy-btn {
-            width: 100%;
-            margin-top: 15px;
-            padding: 14px;
-            border: 2px solid #eee;
-            border-radius: 15px;
-            background: #fff;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-size: 16px;
-            font-weight: 700;
-            transition: .3s;
-            color: #555;
+            width: 100%; margin-top: 15px; padding: 14px;
+            border: 1px solid rgba(0,0,0,0.1); border-radius: 15px;
+            background: rgba(255,255,255,0.6); cursor: pointer;
+            font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;
         }
 
-        .copy-btn:hover { border-color: var(--primary); color: var(--primary); }
-
-        /* تعديل الفوتر ليناسب الخلفية السوداء */
         .footer {
-            text-align: center;
-            margin-top: 25px;
-            font-size: 14px;
-            color: #ffffff; /* لون أبيض ليظهر فوق الصورة السوداء */
-            font-weight: 600;
-            text-shadow: 1px 1px 4px rgba(0,0,0,0.8); /* ظل قوي لزيادة الوضوح */
+            position: absolute; bottom: 20px; width: 100%; text-align: center;
+            color: #fff; font-weight: 700; text-shadow: 1px 1px 4px #000;
         }
-        .footer i { color: #00ffdb; margin-left: 5px; }
-
-        .loading { display: none; text-align: center; margin: 15px 0; }
-        .loading i { font-size: 26px; color: var(--primary); animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0) } 100% { transform: rotate(360deg) } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">
-        <div class="logo"><i class="fas fa-key"></i></div>
-        <h1 class="title">موقع التنصيب <i class="fas fa-fire"></i></h1>
-        <p class="subtitle">إنشاء ملفات جلسة للبوتات بشكل مضمون</p>
-    </div>
+    <div class="logo"><i class="fas fa-key"></i></div>
+    <h1 class="title">موقع التنصيب <i class="fas fa-fire"></i></h1>
+    <p class="subtitle">إنشاء ملفات جلسة للبوتات بشكل مضمون</p>
 
-    <div class="input-group">
-        <label class="input-label">أدخل رقمك (بما في ذلك رمز الدولة)</label>
-        <input type="number" id="mobileNumber" class="input-field" placeholder="+249XXXXXXXX" dir="ltr">
-    </div>
+    <label class="input-label">أدخل رقمك (بما في ذلك رمز الدولة)</label>
+    <input type="number" id="mobileNumber" class="input-field" placeholder="+249XXXXXXXX">
 
-    <button class="generate-btn" id="submit"><i class="fas fa-link"></i> طلب الكود</button>
-    
-    <div class="loading" id="loading"><i class="fas fa-spinner"></i></div>
-    
+    <button class="generate-btn" id="submit">طلب الكود</button>
     <div class="code-display" id="codeDisplay">🦇 الكود سيظهر هنا 🦇</div>
-
-    <button class="copy-btn" id="copy" onclick="copyCode()"><i class="fas fa-copy"></i> نسخ الكود</button>
+    <button class="copy-btn" id="copy" onclick="copyCode()">نسخ الكود</button>
 </div>
 
-<div style="position: absolute; bottom: 20px; z-index: 1; width: 100%;">
-    <div class="footer">
-        <i class="fas fa-dragon"></i> © 2025 𝐃𝐚𝐦𝐨𝐧 | 𝐒𝐚𝐥𝐯𝐚𝐭𝐨𝐫𝐞
-    </div>
-</div>
+<div class="footer">© 2025 𝐃𝐚𝐦𝐨𝐧 | 𝐒𝐚𝐥𝐯𝐚𝐭𝐨𝐫𝐞</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"></script>
 <script>
-    const btn = document.getElementById("submit"),
-    num = document.getElementById("mobileNumber"),
-    codeBox = document.getElementById("codeDisplay"),
-    load = document.getElementById("loading");
-
-    btn.addEventListener("click", async e => {
-        e.preventDefault();
+    const btn=document.getElementById("submit"), num=document.getElementById("mobileNumber"), codeBox=document.getElementById("codeDisplay");
+    btn.addEventListener("click", async () => {
         const n = num.value.trim();
-        if(!n) {
-            codeBox.innerHTML = '<span style="color:#e74c3c">⚠️ الرقم غير صحيح</span>';
-            return;
-        }
-        load.style.display = "block";
-        codeBox.innerHTML = 'جاري طلب الكود...';
+        if(!n) return codeBox.innerHTML = "⚠️ رقم غير صالح";
+        codeBox.innerHTML = "جاري الطلب...";
         try {
-            const clean = n.replace(/[^0-9]/g, "");
-            const res = await axios.get(`/code?number=${clean}`);
-            const code = res.data.code || "غير متاح";
-            codeBox.innerHTML = `<span style="color:var(--primary); font-size:22px;">${code}</span>`;
-        } catch {
-            codeBox.innerHTML = '<span style="color:#e74c3c">حدث خطأ في الخادم</span>';
-        } finally {
-            load.style.display = "none";
-        }
+            const res = await axios.get(`/code?number=${n.replace(/[^0-9]/g,"")}`);
+            codeBox.innerHTML = res.data.code || "غير متاح";
+        } catch { codeBox.innerHTML = "خطأ في الاتصال"; }
     });
-
     function copyCode() {
-        const text = codeBox.innerText.trim();
-        if(text.includes("سيظهر هنا") || text.includes("خطأ")) return;
-        navigator.clipboard.writeText(text).then(() => {
-            const c = document.getElementById("copy");
-            const t = c.innerHTML;
-            c.innerHTML = '<i class="fas fa-check"></i> تم النسخ بنجاح!';
-            c.style.borderColor = "var(--primary)";
-            setTimeout(() => { 
-                c.innerHTML = t; 
-                c.style.borderColor = "#eee";
-            }, 2000);
-        });
+        navigator.clipboard.writeText(codeBox.innerText).then(() => alert("تم النسخ!"));
     }
 </script>
 </body>
