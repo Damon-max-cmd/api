@@ -1,226 +1,229 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Pair Code Generator</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
-<style>
-:root{
---primary:#00816f;
---secondary:#fff;
---text:#0d302b;
---shadow:0 4px 15px rgba(0,0,0,.08);
-}
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Tajawal',sans-serif}
-body{
-background: url('https://files.catbox.moe/rz4wao.jpeg') no-repeat center center fixed;
-background-size: cover;
-display:flex;
-align-items:center;
-justify-content:center;
-min-height:100vh;
-padding:20px;
-color:var(--text);
-position: relative;
-}
-body::before {
-content: "";
-position: absolute;
-inset: 0;
-background: rgba(0, 0, 0, 0.4);
-z-index: 0;
-}
-.container{
-position: relative;
-z-index: 1;
-width:100%;
-max-width:420px;
-background: rgba(255, 255, 255, 0.95);
-border-radius:20px;
-padding:30px;
-box-shadow:var(--shadow);
-backdrop-filter: blur(5px);
-}
-.header{
-text-align:center;
-margin-bottom:25px;
-}
-.logo{
-width:80px;
-height:80px;
-border-radius:50%;
-background:var(--primary);
-display:flex;
-align-items:center;
-justify-content:center;
-margin:0 auto 15px;
-font-size:32px;
-color:#fff;
-box-shadow:0 4px 15px rgba(0,129,111,.3);
-}
-.title{
-font-size:22px;
-font-weight:700;
-color:var(--primary);
-}
-.subtitle{
-font-size:14px;
-color:#555;
-margin-top:5px;
-}
-.input-group{
-margin-top:25px;
-}
-.input-label{
-font-size:13px;
-margin-bottom:8px;
-display:block;
-font-weight:500;
-}
-.input-field{
-width:100%;
-padding:14px;
-border:1.5px solid #ccc;
-border-radius:14px;
-font-size:15px;
-background:#fafafa;
-transition:.3s;
-direction:ltr;
-}
-.input-field:focus{
-outline:none;
-border-color:var(--primary);
-background:#fff;
-box-shadow:0 0 6px rgba(0,129,111,.2);
-}
-.generate-btn{
-width:100%;
-padding:14px;
-border:none;
-border-radius:14px;
-background:var(--primary);
-color:#fff;
-font-size:16px;
-font-weight:600;
-margin-top:20px;
-cursor:pointer;
-transition:.3s;
-}
-.generate-btn:hover{
-transform:translateY(-2px);
-box-shadow:0 6px 15px rgba(0,129,111,.3);
-}
-.loading{
-display:none;
-text-align:center;
-margin:15px 0;
-}
-.loading i{
-font-size:24px;
-color:var(--primary);
-animation:spin 1s linear infinite;
-}
-@keyframes spin{
-0%{transform:rotate(0)}100%{transform:rotate(360deg)}
-}
-.code-display{
-background:#f6f6f6;
-border:1px solid #ddd;
-border-radius:14px;
-padding:14px;
-text-align:center;
-font-size:16px;
-font-weight:600;
-margin-top:15px;
-min-height:45px;
-display:flex;
-align-items:center;
-justify-content:center;
-}
-.success-message{color:#008000;font-weight:600}
-.error-message{color:#e74c3c;font-weight:500}
-.copy-btn{
-width:100%;
-margin-top:15px;
-padding:13px;
-border:1.5px solid #ccc;
-border-radius:14px;
-background:#fafafa;
-cursor:pointer;
-display:flex;
-align-items:center;
-justify-content:center;
-gap:8px;
-font-size:15px;
-font-weight:600;
-transition:.3s;
-}
-.copy-btn:hover{
-background:#fff;
-border-color:var(--primary);
-box-shadow:0 4px 12px rgba(0,129,111,.2);
-}
-.footer{
-text-align:center;
-margin-top:25px;
-font-size:13px;
-color:#555;
-}
-.footer i{color:var(--primary);margin-left:4px;}
-</style>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+    <title>Pair Code Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+    <style>
+        :root {
+            --primary: #00816f;
+            --secondary: #fff;
+            --text: #111; 
+            --shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+
+        body {
+            background: url('https://files.catbox.moe/rz4wao.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* طبقة تعتيم إضافية للخلفية لضمان بروز الكرت والفوتر */
+        body::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6); 
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 420px;
+            background: rgba(255, 255, 255, 0.95); /* خلفية بيضاء قوية للنصوص الداخلية */
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header { text-align: center; margin-bottom: 25px; }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 32px;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(0, 129, 111, 0.4);
+        }
+
+        .title { font-size: 24px; font-weight: 800; color: var(--primary); }
+        .subtitle { font-size: 15px; color: #444; margin-top: 8px; font-weight: 500; }
+
+        .input-group { margin-top: 25px; }
+        .input-label { font-size: 14px; margin-bottom: 10px; display: block; font-weight: 700; color: var(--text); }
+
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 15px;
+            font-size: 16px;
+            background: #fff;
+            transition: .3s;
+            direction: ltr;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 8px rgba(0, 129, 111, 0.1);
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 15px;
+            background: var(--primary);
+            color: #fff;
+            font-size: 17px;
+            font-weight: 700;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .generate-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0, 129, 111, 0.4); }
+
+        .code-display {
+            background: #f8f8f8;
+            border: 2px dashed #ddd;
+            border-radius: 15px;
+            padding: 18px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 20px;
+            min-height: 55px;
+            color: var(--text);
+        }
+
+        .copy-btn {
+            width: 100%;
+            margin-top: 15px;
+            padding: 14px;
+            border: 2px solid #eee;
+            border-radius: 15px;
+            background: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            transition: .3s;
+            color: #555;
+        }
+
+        .copy-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* تعديل الفوتر ليناسب الخلفية السوداء */
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 14px;
+            color: #ffffff; /* لون أبيض ليظهر فوق الصورة السوداء */
+            font-weight: 600;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.8); /* ظل قوي لزيادة الوضوح */
+        }
+        .footer i { color: #00ffdb; margin-left: 5px; }
+
+        .loading { display: none; text-align: center; margin: 15px 0; }
+        .loading i { font-size: 26px; color: var(--primary); animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0) } 100% { transform: rotate(360deg) } }
+    </style>
 </head>
 <body>
+
 <div class="container">
-<div class="header">
-<div class="logo"><i class="fas fa-key"></i></div>
-<h1 class="title">موقع التنصيب <i class="fas fa-fire"></i></h1>
-<p class="subtitle">إنشاء ملفات جلسة للبوتات بشكل مضمون</p>
+    <div class="header">
+        <div class="logo"><i class="fas fa-key"></i></div>
+        <h1 class="title">موقع التنصيب <i class="fas fa-fire"></i></h1>
+        <p class="subtitle">إنشاء ملفات جلسة للبوتات بشكل مضمون</p>
+    </div>
+
+    <div class="input-group">
+        <label class="input-label">أدخل رقمك (بما في ذلك رمز الدولة)</label>
+        <input type="number" id="mobileNumber" class="input-field" placeholder="+249XXXXXXXX" dir="ltr">
+    </div>
+
+    <button class="generate-btn" id="submit"><i class="fas fa-link"></i> طلب الكود</button>
+    
+    <div class="loading" id="loading"><i class="fas fa-spinner"></i></div>
+    
+    <div class="code-display" id="codeDisplay">🦇 الكود سيظهر هنا 🦇</div>
+
+    <button class="copy-btn" id="copy" onclick="copyCode()"><i class="fas fa-copy"></i> نسخ الكود</button>
 </div>
-<div class="input-group">
-<label class="input-label">أدخل رقمك (بما في ذلك رمز الدولة)</label>
-<input type="number" id="mobileNumber" class="input-field" placeholder="+249XXXXXXXX" dir="ltr">
+
+<div style="position: absolute; bottom: 20px; z-index: 1; width: 100%;">
+    <div class="footer">
+        <i class="fas fa-dragon"></i> © 2025 𝐃𝐚𝐦𝐨𝐧 | 𝐒𝐚𝐥𝐯𝐚𝐭𝐨𝐫𝐞
+    </div>
 </div>
-<button class="generate-btn" id="submit"><i class="fas fa-link"></i> طلب الكود</button>
-<div class="loading" id="loading"><i class="fas fa-spinner"></i></div>
-<div class="code-display" id="codeDisplay">🦇 الكود سيظهر هنا 🦇</div>
-<button class="copy-btn" id="copy" onclick="copyCode()"><i class="fas fa-copy"></i> نسخ الكود</button>
-<div class="footer"><i class="fas fa-dragon"></i> © 2025 𝐃𝐚𝐦𝐨𝐧 |𝐒𝐚𝐥𝐯𝐚𝐭𝐨𝐫𝐞 </div>
-</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"></script>
 <script>
-const btn=document.getElementById("submit"),
-num=document.getElementById("mobileNumber"),
-codeBox=document.getElementById("codeDisplay"),
-load=document.getElementById("loading");
-btn.addEventListener("click",async e=>{
-e.preventDefault();
-const n=num.value.trim();
-if(!n){
-codeBox.innerHTML='<div class="error-message"><i class="fas fa-exclamation-circle"></i> الرقم غير صالح</div>';
-return;
-}
-load.style.display="block";
-codeBox.innerHTML='';
-try{
-const clean=n.replace(/[^0-9]/g,"");
-const res=await axios.get(`/code?number=${clean}`);
-const code=res.data.code||"Service Unavailable";
-if(code==="Service Unavailable")codeBox.innerHTML='<div class="error-message"><i class="fas fa-exclamation-circle"></i> Service Unavailable</div>';
-else codeBox.innerHTML=`<div class="success-message"><i class="fas fa-check-circle"></i> CODE: ${code}</div>`;
-}catch{
-codeBox.innerHTML='<div class="error-message"><i class="fas fa-exclamation-circle"></i> Error generating code</div>';
-}finally{load.style.display="none";}
-});
-function copyCode(){
-const text=codeBox.innerText.replace('CODE:','').trim();
-navigator.clipboard.writeText(text).then(()=>{
-const c=document.getElementById("copy");
-const t=c.innerHTML;
-c.innerHTML='<i class="fas fa-check"></i> تم النسخ!';
-setTimeout(()=>{c.innerHTML=t;},2000);
-});
-}
+    const btn = document.getElementById("submit"),
+    num = document.getElementById("mobileNumber"),
+    codeBox = document.getElementById("codeDisplay"),
+    load = document.getElementById("loading");
+
+    btn.addEventListener("click", async e => {
+        e.preventDefault();
+        const n = num.value.trim();
+        if(!n) {
+            codeBox.innerHTML = '<span style="color:#e74c3c">⚠️ الرقم غير صحيح</span>';
+            return;
+        }
+        load.style.display = "block";
+        codeBox.innerHTML = 'جاري طلب الكود...';
+        try {
+            const clean = n.replace(/[^0-9]/g, "");
+            const res = await axios.get(`/code?number=${clean}`);
+            const code = res.data.code || "غير متاح";
+            codeBox.innerHTML = `<span style="color:var(--primary); font-size:22px;">${code}</span>`;
+        } catch {
+            codeBox.innerHTML = '<span style="color:#e74c3c">حدث خطأ في الخادم</span>';
+        } finally {
+            load.style.display = "none";
+        }
+    });
+
+    function copyCode() {
+        const text = codeBox.innerText.trim();
+        if(text.includes("سيظهر هنا") || text.includes("خطأ")) return;
+        navigator.clipboard.writeText(text).then(() => {
+            const c = document.getElementById("copy");
+            const t = c.innerHTML;
+            c.innerHTML = '<i class="fas fa-check"></i> تم النسخ بنجاح!';
+            c.style.borderColor = "var(--primary)";
+            setTimeout(() => { 
+                c.innerHTML = t; 
+                c.style.borderColor = "#eee";
+            }, 2000);
+        });
+    }
 </script>
 </body>
 </html>
