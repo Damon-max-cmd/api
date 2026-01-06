@@ -9,27 +9,38 @@
 :root{
 --primary:#00816f;
 --secondary:#fff;
---bg:#eaf8ef;
 --text:#0d302b;
 --shadow:0 4px 15px rgba(0,0,0,.08);
 }
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Tajawal',sans-serif}
 body{
-background:var(--bg);
+background: url('https://files.catbox.moe/rz4wao.jpeg') no-repeat center center fixed;
+background-size: cover;
 display:flex;
 align-items:center;
 justify-content:center;
 min-height:100vh;
 padding:20px;
 color:var(--text);
+position: relative;
+}
+body::before {
+content: "";
+position: absolute;
+inset: 0;
+background: rgba(0, 0, 0, 0.4);
+z-index: 0;
 }
 .container{
+position: relative;
+z-index: 1;
 width:100%;
 max-width:420px;
-background:#fff;
+background: rgba(255, 255, 255, 0.95);
 border-radius:20px;
 padding:30px;
 box-shadow:var(--shadow);
+backdrop-filter: blur(5px);
 }
 .header{
 text-align:center;
