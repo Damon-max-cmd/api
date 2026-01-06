@@ -1,19 +1,19 @@
 {
-  "name": "لوحة إينازوما",
-  "short_name": "INAZUMA",
-  "description": "لوحة ربط بوت اينازوما",
+  "name": "لوحة دامون",
+  "short_name": "𝐃𝐚𝐦𝐨𝐧",
+  "description": "لوحة ربط بوت دامون",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0b0b16",
   "theme_color": "#5b5ce2",
   "icons": [
     {
-      "src": "https://files.catbox.moe/cuqc9o.jpg",
+      "src": "https://files.catbox.moe/rz4wao.jpeg",
       "sizes": "192x192",
       "type": "image/jpeg"
     },
     {
-      "src": "https://files.catbox.moe/cuqc9o.jpg",
+      "src": "https://files.catbox.moe/rz4wao.jpeg",
       "sizes": "512x512",
       "type": "image/jpeg"
     }
