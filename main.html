@@ -26,23 +26,22 @@
                 margin: 0;
                 font-family: "Cairo", sans-serif;
                 min-height: 100vh;
-                /* نفس الخلفية المستخدمة في ملف pair */
                 background: url('https://files.catbox.moe/rz4wao.jpeg') no-repeat center center fixed;
                 background-size: cover;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                color: #111; /* نصوص داكنة لتناسب الحاوية الفاتحة */
                 position: relative;
                 padding: 20px;
+                overflow: hidden;
             }
 
-            /* طبقة التعتيم لضمان وضوح الفوتر */
+            /* طبقة تعتيم خفيفة جداً للخلفية الأساسية */
             body::before {
                 content: "";
                 position: absolute;
                 inset: 0;
-                background: rgba(0, 0, 0, 0.6);
+                background: rgba(0, 0, 0, 0.4);
                 z-index: 0;
             }
 
@@ -52,13 +51,19 @@
                 width: 100%;
                 max-width: 420px;
                 padding: 40px 28px;
-                /* نفس تصميم الحاوية البيضاء الشفافة */
-                background: rgba(255, 255, 255, 0.95);
-                border-radius: 28px;
-                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+                
+                /* الحل: تقليل شفافية الخلفية البيضاء (0.45) وإضافة Blur */
+                background: rgba(255, 255, 255, 0.45); 
+                border-radius: 30px;
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
                 animation: fadeUp 0.8s ease;
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.2);
+                
+                /* تأثير الزجاج الضبابي */
+                backdrop-filter: blur(15px);
+                -webkit-backdrop-filter: blur(15px);
+                
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                text-align: center;
             }
 
             @keyframes fadeUp {
@@ -72,26 +77,24 @@
                 margin: 0 auto 20px;
                 border-radius: 25px;
                 background: url(https://files.catbox.moe/57tf3e.jpeg) center/cover;
-                box-shadow: 0 8px 25px rgba(91, 92, 226, 0.3);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
             }
 
             h1 {
-                text-align: center;
                 font-size: 2.2rem;
                 margin: 0 0 10px;
                 font-weight: 800;
-                background: linear-gradient(90deg, #5b5ce2, #8f94fb);
+                background: linear-gradient(90deg, #5b5ce2, #00816f);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
             }
 
             .desc {
-                text-align: center;
                 font-size: 15px;
-                color: #444; /* لون رمادي غامق وواضح */
+                color: #000; /* تغيير اللون للأسود الصريح ليبرز فوق الزجاج */
                 margin-bottom: 35px;
                 line-height: 1.6;
-                font-weight: 600;
+                font-weight: 700;
             }
 
             .btn {
@@ -103,7 +106,6 @@
                 font-size: 16px;
                 font-weight: 700;
                 color: #fff;
-                /* تدرج لوني أرجواني/أزرق فخم */
                 background: linear-gradient(135deg, #5b5ce2, #3a3bb1);
                 display: flex;
                 align-items: center;
@@ -114,28 +116,22 @@
             }
 
             .btn:hover {
-                background: linear-gradient(135deg, #7475f7, #5b5ce2);
-                box-shadow: 0 10px 20px rgba(91, 92, 226, 0.3);
                 transform: translateY(-3px);
+                box-shadow: 0 10px 20px rgba(91, 92, 226, 0.3);
             }
 
-            /* أزرار التواصل بألوان مختلفة قليلاً للتميز */
             .btn-secondary {
-                background: linear-gradient(135deg, #25D366, #128C7E); /* لون واتساب */
-            }
-            .btn-secondary:hover {
-                background: linear-gradient(135deg, #2cf377, #25D366);
-                box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2);
+                background: linear-gradient(135deg, #25D366, #128C7E);
             }
 
             .btn-dark {
                 background: linear-gradient(135deg, #333, #000);
             }
 
-            /* تعديل الحقوق لتظهر فوق الخلفية السوداء */
+            /* الحقوق تظهر بوضوح في أسفل الشاشة */
             .credit {
                 position: absolute;
-                bottom: -50px; /* خارج الحاوية */
+                bottom: 20px;
                 left: 0;
                 right: 0;
                 text-align: center;
@@ -143,6 +139,7 @@
                 color: #fff;
                 font-weight: 700;
                 text-shadow: 1px 1px 5px rgba(0,0,0,0.8);
+                z-index: 1;
             }
         </style>
     </head>
@@ -164,7 +161,7 @@
 
             <button
                 class="btn btn-secondary"
-                onclick="location.href='https://whatsapp.com/channel/0029Vb6mUDMEVccI8C4oVw0T'"
+                onclick="window.open('https://whatsapp.com/channel/0029Vb6mUDMEVccI8C4oVw0T')"
             >
                 <i class="fab fa-whatsapp"></i>
                 قناة الواتساب
@@ -177,9 +174,9 @@
                 <i class="fas fa-headset"></i>
                 تواصل مع المطور
             </button>
-
-            <div class="credit">© 2025 𝐃𝐚𝐦𝐨𝐧 | 𝐒𝐚𝐥𝐯𝐚𝐭𝐨𝐫𝐞</div>
         </div>
+
+        <div class="credit">© 2025 𝐃𝐚𝐦𝐨𝐧 | 𝐒𝐚𝐥𝐯𝐚𝐭𝐨𝐫𝐞</div>
 
         <script>
             if ("serviceWorker" in navigator) {
