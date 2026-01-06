@@ -1,113 +1,61 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Damon Panel</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet" />
-        <style>
-            * { box-sizing: border-box; }
-            body {
-                margin: 0; font-family: "Cairo", sans-serif; min-height: 100vh;
-                background: url('https://files.catbox.moe/rz4wao.jpeg') no-repeat center center fixed;
-                background-size: cover; display: flex; align-items: center; justify-content: center;
-                position: relative; padding: 20px; overflow: hidden;
-            }
-            
-            /* طبقة تعتيم إضافية للخلفية لزيادة تباين الزجاج */
-            body::before { 
-                content: ""; position: absolute; inset: 0; 
-                background: rgba(0, 0, 0, 0.5); 
-                z-index: 0; 
-            }
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Damon Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet" />
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0; font-family: "Cairo", sans-serif; min-height: 100vh;
+            background: url('https://files.catbox.moe/rz4wao.jpeg') no-repeat center center fixed;
+            background-size: cover; display: flex; align-items: center; justify-content: center;
+            position: relative; padding: 20px; overflow: hidden;
+        }
+        body::before { content: ""; position: absolute; inset: 0; background: rgba(0, 0, 0, 0.45); z-index: 0; }
 
-            .panel {
-                position: relative; z-index: 1; width: 100%; max-width: 420px;
-                padding: 40px 28px; 
-                /* تعديل الشفافية لتكون زجاجية مظلمة مطابقة لـ pair */
-                background: rgba(255, 255, 255, 0.08); 
-                backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-                border-radius: 40px; 
-                border: 1px solid rgba(255, 255, 255, 0.15);
-                box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5); 
-                text-align: center;
-                animation: fadeUp 0.8s ease;
-            }
+        .panel {
+            position: relative; z-index: 1; width: 100%; max-width: 420px;
+            padding: 40px 28px; 
+            background: rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border-radius: 35px; border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4); text-align: center;
+        }
 
-            @keyframes fadeUp {
-                from { opacity: 0; transform: translateY(20px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
+        .logo { width: 95px; height: 95px; margin: 0 auto 20px; border-radius: 25px; background: url(https://files.catbox.moe/57tf3e.jpeg) center/cover; }
 
-            .logo {
-                width: 100px; height: 100px; margin: 0 auto 25px; 
-                border-radius: 25px;
-                background: url(https://files.catbox.moe/57tf3e.jpeg) center/cover;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            }
+        h1 { font-size: 2.2rem; margin-bottom: 10px; font-weight: 900; color: #ffffff; text-shadow: 2px 2px 5px rgba(0,0,0,0.6); }
+        .desc { font-size: 16px; color: #ffffff; margin-bottom: 30px; font-weight: 800; line-height: 1.6; text-shadow: 1px 1px 4px rgba(0,0,0,0.6); }
 
-            /* نصوص بيضاء ناصعة بتباين عالٍ جداً */
-            h1 { 
-                font-size: 2.4rem; margin-bottom: 12px; font-weight: 900; 
-                color: #ffffff; 
-                text-shadow: 0 2px 10px rgba(0,0,0,0.8); 
-            }
-            
-            .desc { 
-                font-size: 16px; color: #ffffff; margin-bottom: 35px; 
-                font-weight: 800; line-height: 1.6; 
-                text-shadow: 0 2px 8px rgba(0,0,0,0.8); 
-            }
+        .btn {
+            width: 100%; padding: 16px; margin-bottom: 15px; border: none; border-radius: 18px;
+            font-size: 16px; font-weight: 800; color: #fff;
+            background: rgba(91, 92, 226, 0.85);
+            display: flex; align-items: center; justify-content: center; gap: 12px; cursor: pointer; transition: 0.3s;
+        }
+        .btn:hover { transform: scale(1.02); }
+        .btn-whatsapp { background: rgba(37, 211, 102, 0.85); }
+        .btn-dev { background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255,255,255,0.2); }
 
-            /* أزرار نصف شفافة لتعزيز تأثير الزجاج */
-            .btn {
-                width: 100%; padding: 16px; margin-bottom: 18px; 
-                border: 1px solid rgba(255, 255, 255, 0.1); 
-                border-radius: 20px;
-                font-size: 17px; font-weight: 800; color: #fff;
-                background: rgba(91, 92, 226, 0.7);
-                display: flex; align-items: center; justify-content: center; 
-                gap: 12px; cursor: pointer;
-                transition: 0.3s ease;
-            }
-            
-            .btn:hover { transform: scale(1.02); background: rgba(91, 92, 226, 0.9); }
-
-            .btn-whatsapp { background: rgba(37, 211, 102, 0.6); }
-            .btn-whatsapp:hover { background: rgba(37, 211, 102, 0.8); }
-
-            .btn-dev { background: rgba(0, 0, 0, 0.5); }
-            .btn-dev:hover { background: rgba(0, 0, 0, 0.8); }
-
-            /* الفوتر مطابق تماماً للصورة */
-            .credit {
-                position: absolute; bottom: 30px; width: 100%; text-align: center;
-                color: #ffffff; font-weight: 900; font-size: 15px;
-                text-shadow: 0 0 10px rgba(0,0,0,1), 0 0 5px rgba(0,0,0,1);
-                z-index: 1;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="panel">
-            <div class="logo"></div>
-            <h1>لوحة دامون</h1>
-            <div class="desc">يجيب لك كود ربط ويرسل لك ملف <br> الجلسة في خاص رقم البوت</div>
-            
-            <button class="btn" onclick="location.href='/pair'">
-                <i class="fas fa-plug"></i> كود الربط
-            </button>
-            
-            <button class="btn btn-whatsapp" onclick="window.open('https://whatsapp.com/channel/0029Vb6mUDMEVccI8C4oVw0T')">
-                <i class="fab fa-whatsapp"></i> قناة الواتساب
-            </button>
-            
-            <button class="btn btn-dev" onclick="location.href='https://wa.me/971545780897'">
-                <i class="fas fa-headset"></i> تواصل مع المطور
-            </button>
-        </div>
-        
-        <div class="credit">© 2025 𝐃𝐚𝐦𝐨𝐧 | 𝐒𝐚𝐥𝐯𝐚𝐭𝐨𝐫𝐞</div>
-    </body>
+        .credit {
+            position: absolute; bottom: 25px; width: 100%; text-align: center;
+            color: #ffffff; font-weight: 900; font-size: 15px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,1);
+        }
+    </style>
+</head>
+<body>
+    <div class="panel">
+        <div class="logo"></div>
+        <h1>لوحة دامون</h1>
+        <div class="desc">يجيب لك كود ربط ويرسل لك ملف الجلسة في خاص رقم البوت</div>
+        <button class="btn" onclick="location.href='/pair'"><i class="fas fa-plug"></i> كود الربط</button>
+        <button class="btn btn-whatsapp" onclick="window.open('https://whatsapp.com/channel/0029Vb6mUDMEVccI8C4oVw0T')"><i class="fab fa-whatsapp"></i> قناة الواتساب</button>
+        <button class="btn btn-dev" onclick="location.href='https://wa.me/971545780897'"><i class="fas fa-headset"></i> تواصل مع المطور</button>
+    </div>
+    <div class="credit">© 2025 𝐃𝐚𝐦𝐨𝐧 | 𝐒𝐚𝐥𝐯𝐚𝐭𝐨𝐫𝐞</div>
+</body>
 </html>
