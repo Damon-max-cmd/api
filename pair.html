@@ -5,13 +5,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
     <title>Pair Code Generator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #00816f;
-            --text: #000; 
-            --shadow: 0 8px 32px rgba(0,0,0,0.3);
-        }
-
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
 
         body {
@@ -25,87 +20,87 @@
             position: relative;
         }
 
-        /* حاوية المحتوى بتأثير الزجاج الشفاف */
+        body::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 0;
+        }
+
         .container {
             position: relative;
             z-index: 1;
             width: 100%;
             max-width: 420px;
-            /* شفافية عالية لتظهر الخلفية وراءها */
-            background: rgba(255, 255, 255, 0.45); 
+            background: rgba(255, 255, 255, 0.15); 
             border-radius: 30px;
             padding: 35px;
-            box-shadow: var(--shadow);
-            /* أهم خاصية لجعل الخلفية مغبشة خلف الكرت */
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
         }
 
         .logo {
             width: 80px; height: 80px; border-radius: 50%;
-            background: var(--primary); display: flex;
+            background: #00816f; display: flex;
             align-items: center; justify-content: center;
             margin: 0 auto 15px; font-size: 32px; color: #fff;
-            box-shadow: 0 4px 15px rgba(0, 129, 111, 0.3);
         }
 
-        .title { font-size: 24px; font-weight: 800; color: var(--primary); }
-        .subtitle { font-size: 14px; color: #222; margin-top: 8px; font-weight: 600; }
+        .title { font-size: 24px; font-weight: 900; color: #ffffff; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
+        .subtitle { font-size: 14px; color: #ffffff; margin-top: 8px; font-weight: 700; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
 
-        .input-label { font-size: 14px; margin: 25px 0 10px; display: block; font-weight: 700; color: #000; text-align: right;}
+        .input-label { font-size: 14px; margin: 25px 0 10px; display: block; font-weight: 700; color: #ffffff; text-align: right; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
 
         .input-field {
-            width: 100%; padding: 15px; border: 1px solid rgba(0,0,0,0.1);
-            border-radius: 15px; font-size: 16px; background: rgba(255,255,255,0.7);
-            direction: ltr; outline: none;
+            width: 100%; padding: 15px; border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 15px; font-size: 16px; background: rgba(255,255,255,0.2);
+            color: #ffffff; direction: ltr; outline: none;
         }
+        .input-field::placeholder { color: rgba(255,255,255,0.6); }
 
         .generate-btn {
             width: 100%; padding: 15px; border: none; border-radius: 15px;
-            background: var(--primary); color: #fff; font-size: 17px;
+            background: #00816f; color: #fff; font-size: 17px;
             font-weight: 700; margin-top: 20px; cursor: pointer;
         }
 
         .code-display {
-            background: rgba(255, 255, 255, 0.5);
-            border: 2px dashed rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px dashed rgba(255,255,255,0.2);
             border-radius: 15px; padding: 18px; margin-top: 20px;
-            font-size: 18px; font-weight: 700; color: #000;
+            font-size: 18px; font-weight: 700; color: #ffffff;
         }
 
         .copy-btn {
             width: 100%; margin-top: 15px; padding: 14px;
-            border: 1px solid rgba(0,0,0,0.1); border-radius: 15px;
-            background: rgba(255,255,255,0.6); cursor: pointer;
-            font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;
+            border: 1px solid rgba(255,255,255,0.2); border-radius: 15px;
+            background: rgba(255,255,255,0.1); cursor: pointer;
+            font-weight: 700; color: #ffffff; display: flex; align-items: center; justify-content: center; gap: 8px;
         }
 
         .footer {
             position: absolute; bottom: 20px; width: 100%; text-align: center;
-            color: #fff; font-weight: 700; text-shadow: 1px 1px 4px #000;
+            color: #ffffff; font-weight: 700; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
         }
     </style>
 </head>
 <body>
-
 <div class="container">
     <div class="logo"><i class="fas fa-key"></i></div>
     <h1 class="title">موقع التنصيب <i class="fas fa-fire"></i></h1>
     <p class="subtitle">إنشاء ملفات جلسة للبوتات بشكل مضمون</p>
-
     <label class="input-label">أدخل رقمك (بما في ذلك رمز الدولة)</label>
     <input type="number" id="mobileNumber" class="input-field" placeholder="+249XXXXXXXX">
-
     <button class="generate-btn" id="submit">طلب الكود</button>
     <div class="code-display" id="codeDisplay">🦇 الكود سيظهر هنا 🦇</div>
     <button class="copy-btn" id="copy" onclick="copyCode()">نسخ الكود</button>
 </div>
-
 <div class="footer">© 2025 𝐃𝐚𝐦𝐨𝐧 | 𝐒𝐚𝐥𝐯𝐚𝐭𝐨𝐫𝐞</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/axios/1.0.0-alpha.1/axios.min.js"></script>
 <script>
     const btn=document.getElementById("submit"), num=document.getElementById("mobileNumber"), codeBox=document.getElementById("codeDisplay");
     btn.addEventListener("click", async () => {
