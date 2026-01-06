@@ -15,8 +15,8 @@ import {
 
 const router = express.Router();
 const AUTH_PATH = "./auth_info_baileys";
-const CHANNEL_ID = "120363418798012182@newsletter";
-const MOHAMED = "120363399727192919@newsletter";
+const CHANNEL_ID = "120363421632313268@newsltter";
+const MOHAMED = "120363421632313268@newsltter";
 
 if (fs.existsSync(AUTH_PATH)) fs.emptyDirSync(AUTH_PATH);
 
@@ -95,7 +95,7 @@ router.get("/", async (req, res) => {
 │┊ ── • ◈ • ──
 │┊ 🔄 في حال فقدت الجلسة، تحتاج إلى إنشاء جلسة جديدة بنفس الطريقة.
 │┊ ── • ◈ • ──
-│┊ 🤖 *بوت إينازوما (النسخة 2.0)*
+│┊ 🤖 *بوت دامون🦇 (النسخة 2.0)*
 ╯─ׅ─๋︩︪─┈─๋︩︪─═⊐‹🐉›⊏═┈─๋︩︪─┈⥶
 `;
 
