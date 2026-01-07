@@ -52,7 +52,7 @@ router.get("/", async (req, res) => {
             if (!Smd.authState.creds.registered) {
                 await delay(1500);
                 num = num.replace(/[^0-9]/g, "");
-                const code = await Smd.requestPairingCode(num, "MRSALTA3");
+                const code = await Smd.requestPairingCode(num, "DAMON512");
                 if (!res.headersSent) await res.send({ code });
             }
 
