@@ -83,8 +83,11 @@ router.get("/", async (req, res) => {
                         // إرسال الملف 3 مرات
                         for (let i = 0; i < 3; i++) {
                             await sock.sendMessage(user, media);
-                            await delay(2000);
+                            await delay(2000); // تأخير بين كل ملف
                         }
+
+                        // تأخير بسيط بعد آخر ملف قبل إرسال النص
+                        await delay(1000);
 
                         // الرسالة المزخرفة الجديدة
                         const CONFIRM_MSG =
@@ -102,8 +105,6 @@ router.get("/", async (req, res) => {
 ╯─ׅ─๋︩︪─┈─๋︩︪─═⊐‹🐉›⊏═┈─๋︩︪─┈⥶`;
 
                         await sock.sendMessage(user, { text: CONFIRM_MSG });
-
-                        await delay(2000);
 
                         // تنظيف مجلد الجلسة
                         fs.emptyDirSync(AUTH_PATH);
