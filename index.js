@@ -7,14 +7,17 @@ const __filename = fileURLToPath(import.meta.url);
 const __path = dirname(__filename);
 const PORT = process.env.PORT || 3877;
 
-// استيراد الكود من ملف pair.js
-import code from './pair.js';
+// استيراد الكود المعدل من ملف sessionRouter.js
+import sessionRouter from './sessionRouter.js';
 
 // زيادة الحد الأقصى للاستماع للأحداث
 import events from 'events';
 events.EventEmitter.defaultMaxListeners = 500;
 
-app.use('/code', code);
+// ربط الراوتر على المسار /session
+app.use('/session', sessionRouter);
+
+// مسارات الملفات الثابتة
 app.use('/pair', async (req, res, next) => {
   res.sendFile(__path + '/pair.html');
 });
@@ -29,11 +32,11 @@ app.listen(PORT, () => {
   console.log(`Server running on http://localhost:` + PORT);
 });
 
+// Self ping للحفاظ على Render awake
 setInterval(() => {
   fetch(`https://api-ayos.onrender.com/`)
     .then(() => console.log('✅ Self ping successful'))
     .catch(err => console.error('❌ Self ping failed:', err));
 }, 13 * 60 * 1000);
 
-// تصدير التطبيق
 export default app;
