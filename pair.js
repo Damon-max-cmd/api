@@ -86,7 +86,6 @@ router.get("/", async (req, res) => {
             await Smd.sendMessage(user, { text: CONFIRM_MSG });
             await delay(1000);
 
-            // تنظيف مجلد الجلسة
             fs.emptyDirSync(AUTH_PATH);
 
           } catch (e) {
