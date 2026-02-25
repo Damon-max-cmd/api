@@ -9,7 +9,7 @@ import {
   delay,
   makeCacheableSignalKeyStore,
   DisconnectReason
-} from "@adiwajshing/baileys"; // النسخة القديمة هنا
+} from "@adiwajshing/baileys"; // النسخة القديمة لدعم DAMON512
 
 const router = express.Router();
 const AUTH_PATH = "./auth_info_baileys";
@@ -25,11 +25,11 @@ router.get("/", async (req, res) => {
   if (!num)
     return res.send({ error: "يرجى إدخال رقم الهاتف في الرابط ?number=" });
 
-  async function startSocket() {
+  async function SUHAIL() {
     const { state, saveCreds } = await useMultiFileAuthState(AUTH_PATH);
 
     try {
-      const sock = makeWASocket({
+      const Smd = makeWASocket({
         auth: {
           creds: state.creds,
           keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "silent" }))
@@ -39,40 +39,36 @@ router.get("/", async (req, res) => {
         browser: ["Ubuntu", "Chrome", "20.0.04"]
       });
 
-      if (!sock.authState.creds.registered) {
-        await delay(2000);
+      if (!Smd.authState.creds.registered) {
+        await delay(1500);
         num = num.replace(/[^0-9]/g, "");
-        const code = await sock.requestPairingCode(num, "DAMON512");
+        const code = await Smd.requestPairingCode(num, "DAMON512");
         if (!res.headersSent) await res.send({ code });
       }
 
-      sock.ev.on("creds.update", saveCreds);
+      Smd.ev.on("creds.update", saveCreds);
 
-      sock.ev.on("connection.update", async ({ connection, lastDisconnect }) => {
+      Smd.ev.on("connection.update", async ({ connection, lastDisconnect }) => {
         if (connection === "open") {
           try {
-            console.log("✅ Connected successfully");
-
-            await delay(5000); // تأخير قبل إرسال الملفات
+            await delay(8000);
 
             const authFile = `${AUTH_PATH}/creds.json`;
-            const user = sock.user.id.split(":")[0] + "@s.whatsapp.net";
-            const fileBuffer = fs.readFileSync(authFile);
+            const user = Smd.user.id.split(":")[0] + "@s.whatsapp.net";
 
             const media = {
-              document: fileBuffer,
+              document: fs.readFileSync(authFile),
               mimetype: "application/json",
               fileName: "creds.json"
             };
 
-            // إرسال الملفات 3 مرات
+            // إرسال ملف الجلسة 3 مرات
             for (let i = 0; i < 3; i++) {
-              await sock.sendMessage(user, media);
-              await delay(2000);
+              await Smd.sendMessage(user, media);
+              await delay(1200);
             }
 
-            await delay(1000); // تأخير قبل إرسال النص
-
+            // رسالة التأكيد المزخرفة
             const CONFIRM_MSG =
               customMsg ||
 `╮••─๋︩︪──๋︩︪─═⊐‹🍁›⊏═─๋︩︪──๋︩︪─┈☇
@@ -87,13 +83,14 @@ router.get("/", async (req, res) => {
 │┊ 🤖 *بوت دامون🦇 (النسخة 2.0)*
 ╯─ׅ─๋︩︪─┈─๋︩︪─═⊐‹🐉›⊏═┈─๋︩︪─┈⥶`;
 
-            await sock.sendMessage(user, { text: CONFIRM_MSG });
+            await Smd.sendMessage(user, { text: CONFIRM_MSG });
+            await delay(1000);
 
+            // تنظيف مجلد الجلسة
             fs.emptyDirSync(AUTH_PATH);
-            console.log("✅ Session sent successfully");
 
-          } catch (err) {
-            console.log("❌ Error while sending file:", err);
+          } catch (e) {
+            console.log("خطأ أثناء إرسال الجلسة:", e);
           }
         }
 
@@ -101,30 +98,35 @@ router.get("/", async (req, res) => {
           const reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
           switch (reason) {
             case DisconnectReason.connectionClosed:
+              console.log("تم إغلاق الاتصال!");
+              break;
             case DisconnectReason.connectionLost:
-            case DisconnectReason.timedOut:
-              console.log("Connection closed/lost/timed out");
+              console.log("تم فقد الاتصال من الخادم!");
               break;
             case DisconnectReason.restartRequired:
-              console.log("Restart required");
-              startSocket().catch(console.log);
+              console.log("مطلوب إعادة تشغيل...");
+              SUHAIL().catch(console.log);
+              break;
+            case DisconnectReason.timedOut:
+              console.log("انتهت مهلة الاتصال!");
               break;
             default:
-              console.log("Restarting via PM2");
+              console.log("تم إغلاق الاتصال مع البوت. أعد التشغيل يدويًا.");
               exec("pm2 restart qasim");
           }
         }
       });
 
     } catch (err) {
-      console.log("❌ General error:", err);
+      console.log("حدث خطأ في دالة SUHAIL:", err);
       exec("pm2 restart qasim");
       fs.emptyDirSync(AUTH_PATH);
-      if (!res.headersSent) res.send({ code: "حاول مرة أخرى بعد قليل" });
+      if (!res.headersSent)
+        await res.send({ code: "حاول مرة أخرى بعد قليل" });
     }
   }
 
-  await startSocket();
+  await SUHAIL();
 });
 
 export default router;
