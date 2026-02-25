@@ -9,7 +9,7 @@ import {
   delay,
   makeCacheableSignalKeyStore,
   DisconnectReason
-} from "@adiwajshing/baileys"; // النسخة القديمة لدعم DAMON512
+} from "@adiwajshing/baileys";
 
 const router = express.Router();
 const AUTH_PATH = "./auth_info_baileys";
@@ -97,20 +97,16 @@ router.get("/", async (req, res) => {
           const reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
           switch (reason) {
             case DisconnectReason.connectionClosed:
-              console.log("تم إغلاق الاتصال!");
-              break;
             case DisconnectReason.connectionLost:
-              console.log("تم فقد الاتصال من الخادم!");
+            case DisconnectReason.timedOut:
+              console.log("تم فقد الاتصال أو انتهت المهلة");
               break;
             case DisconnectReason.restartRequired:
               console.log("مطلوب إعادة تشغيل...");
               SUHAIL().catch(console.log);
               break;
-            case DisconnectReason.timedOut:
-              console.log("انتهت مهلة الاتصال!");
-              break;
             default:
-              console.log("تم إغلاق الاتصال مع البوت. أعد التشغيل يدويًا.");
+              console.log("أعد التشغيل يدويًا");
               exec("pm2 restart qasim");
           }
         }
