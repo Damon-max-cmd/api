@@ -14,8 +14,6 @@ import {
 
 const router = express.Router();
 const AUTH_PATH = "./auth_info_baileys";
-const CHANNEL_ID = "120363421632313268@newsletter";
-const MOHAMED = "120363421632313268@newsletter";
 
 if (fs.existsSync(AUTH_PATH)) fs.emptyDirSync(AUTH_PATH);
 
@@ -28,13 +26,13 @@ router.get("/", async (req, res) => {
     if (!num)
         return res.send({ error: "يرجى إدخال رقم الهاتف في الرابط ?number=" });
 
-    async function SUHAIL() {
+    async function startSocket() {
         const { state, saveCreds } = await useMultiFileAuthState(AUTH_PATH);
 
         try {
             const { version } = await fetchLatestBaileysVersion();
 
-            const Smd = makeWASocket({
+            const sock = makeWASocket({
                 version,
                 auth: {
                     creds: state.creds,
@@ -48,40 +46,43 @@ router.get("/", async (req, res) => {
                 browser: ["Ubuntu", "Chrome", "20.0.04"]
             });
 
-            if (!Smd.authState.creds.registered) {
-                await delay(1500);
+            if (!sock.authState.creds.registered) {
+                await delay(2000);
                 num = num.replace(/[^0-9]/g, "");
-                const code = await Smd.requestPairingCode(num, "DAMON512");
+                const code = await sock.requestPairingCode(num, "DAMON512");
                 if (!res.headersSent) await res.send({ code });
             }
 
-            Smd.ev.on("creds.update", saveCreds);
+            sock.ev.on("creds.update", saveCreds);
 
-            Smd.ev.on("connection.update", async ({ connection, lastDisconnect }) => {
+            sock.ev.on("connection.update", async ({ connection, lastDisconnect }) => {
 
                 if (connection === "open") {
                     try {
-                        console.log("✅ تم الاتصال");
+                        console.log("✅ Connected successfully");
 
-                        await delay(8000);
+                        // ⏳ مهم جداً على Render
+                        await delay(15000);
 
                         const authFile = `${AUTH_PATH}/creds.json`;
 
-                        // 🔥 إصلاح مشكلة JID
+                        // 🔥 إصلاح JID
                         const user =
-                            Smd.user.id.split(":")[0] + "@s.whatsapp.net";
+                            sock.user.id.split(":")[0] + "@s.whatsapp.net";
 
-                        // 🔥 الطريقة الحديثة لإرسال الملف
+                        // 🔥 قراءة الملف كـ Buffer (أفضل لـ Render)
+                        const fileBuffer = fs.readFileSync(authFile);
+
                         const media = {
-                            document: { url: authFile },
+                            document: fileBuffer,
                             mimetype: "application/json",
                             fileName: "creds.json"
                         };
 
                         // إرسال الملف 3 مرات
                         for (let i = 0; i < 3; i++) {
-                            await Smd.sendMessage(user, media);
-                            await delay(1500);
+                            await sock.sendMessage(user, media);
+                            await delay(2000);
                         }
 
                         const CONFIRM_MSG =
@@ -90,48 +91,47 @@ router.get("/", async (req, res) => {
 📁 تم إرسال ملف الجلسة (creds.json)
 ⚠️ احتفظ بالملف في مكان آمن`;
 
-                        await Smd.sendMessage(user, { text: CONFIRM_MSG });
+                        await sock.sendMessage(user, { text: CONFIRM_MSG });
 
-                        await delay(1000);
+                        await delay(2000);
 
-                        // متابعة القناة (اختياري)
-                        await Smd.newsletterFollow(CHANNEL_ID);
-                        await Smd.newsletterFollow(MOHAMED);
-
-                        // تنظيف الجلسة
+                        // تنظيف مجلد الجلسة
                         fs.emptyDirSync(AUTH_PATH);
 
-                    } catch (e) {
-                        console.log("❌ خطأ أثناء إرسال الجلسة:", e);
+                        console.log("✅ Session sent successfully");
+
+                    } catch (err) {
+                        console.log("❌ Error while sending file:", err);
                     }
                 }
 
                 if (connection === "close") {
-                    const reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
+                    const reason =
+                        new Boom(lastDisconnect?.error)?.output?.statusCode;
 
                     switch (reason) {
                         case DisconnectReason.connectionClosed:
-                            console.log("تم إغلاق الاتصال");
+                            console.log("Connection closed");
                             break;
                         case DisconnectReason.connectionLost:
-                            console.log("تم فقد الاتصال");
+                            console.log("Connection lost");
                             break;
                         case DisconnectReason.restartRequired:
-                            console.log("إعادة تشغيل مطلوبة");
-                            SUHAIL().catch(console.log);
+                            console.log("Restart required");
+                            startSocket().catch(console.log);
                             break;
                         case DisconnectReason.timedOut:
-                            console.log("انتهت المهلة");
+                            console.log("Connection timed out");
                             break;
                         default:
-                            console.log("إعادة تشغيل عبر PM2");
+                            console.log("Restarting via PM2");
                             exec("pm2 restart qasim");
                     }
                 }
             });
 
         } catch (err) {
-            console.log("❌ خطأ عام:", err);
+            console.log("❌ General error:", err);
             exec("pm2 restart qasim");
             fs.emptyDirSync(AUTH_PATH);
             if (!res.headersSent)
@@ -139,7 +139,7 @@ router.get("/", async (req, res) => {
         }
     }
 
-    await SUHAIL();
+    await startSocket();
 });
 
 export default router;
